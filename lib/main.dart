@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:excuse_demo/views/event/event.dart';
+import 'package:excuse_demo/views/event/event_create.dart';
+import 'package:excuse_demo/views/event/event_list.dart';
+import 'package:excuse_demo/views/home.dart';
 import 'package:excuse_demo/views/initial/change_pwd.dart';
 import 'package:excuse_demo/views/initial/login.dart';
 import 'package:excuse_demo/views/initial/register.dart';
@@ -13,7 +15,13 @@ void main() {
     var style = const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(style);
   }
+
   runApp(const MyApp());
+}
+
+// 路由
+class NavigatorKey {
+  static final navigatorKey = GlobalKey<NavigatorState>();
 }
 
 class MyApp extends StatelessWidget {
@@ -25,16 +33,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
+      navigatorKey: NavigatorKey.navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
       routes: {
-        'login':(context)=>const LoginPage(),
-        'register':(context)=>const RegisterPage(),
-        'changePwd':(context)=>const ChangePwdPage(),
-        'event':(context)=>const EventPage()
+        '/home': (context) => const HomePage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/changePwd': (context) => const ChangePwdPage(),
+        '/event': (context) => const EventPage(),
+        "/createEvent": (context) => const CreateEvent(),
       },
     );
   }
@@ -51,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
   SharedPreferences? sharedPreferences;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     readFromStorage();
   }
@@ -69,8 +80,8 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Future.delayed(const Duration(milliseconds: 3000), () {
         setState(() {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const EventPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
         });
       });
     }

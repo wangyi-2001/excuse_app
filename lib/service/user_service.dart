@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/http/options.dart';
+import 'package:excuse_demo/main.dart';
 import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/routes/user_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +17,8 @@ loginService(String phone, String password) async {
       queryParameters: queryParameters);
 
   if (UserData.fromJson(response.data).code == 0) {
-    // sharedPreferences.setString("user", jsonEncode(response.data));
+    sharedPreferences.setString("user", jsonEncode(response.data));
+    NavigatorKey.navigatorKey.currentState!.pushNamedAndRemoveUntil("/home", (route) => false);
   }
 
   BotToast.showText(text: UserData.fromJson(response.data).message);
@@ -38,15 +41,15 @@ registerService(
   BotToast.showText(text: UserData.fromJson(response.data).message);
 }
 
-changePwdService(String phone, String password, String repassword) async {
+changePwdService(String phone, String password) async {
   Map<String, dynamic> queryParameters = {
-    "phone": phone,
+    "phoneWithoutId": phone,
     "password": password,
-    "repassword": repassword
   };
-  Response response = await Dio().get(
+  Response response = await Dio().post(
       HttpOptions.BASE_URL + UserRoute.userUpdatePath,
       queryParameters: queryParameters);
+  BotToast.showText(text: UserData.fromJson(response.data).message);
 }
 
 logoutService(int userId) async {
@@ -55,7 +58,6 @@ logoutService(int userId) async {
   Response response = await Dio().post(
       HttpOptions.BASE_URL + UserRoute.userLogoutPath,
       queryParameters: queryParameters);
-  // showToast("已退出");
   BotToast.showText(text: "已退出");
   sharedPreferences.remove("user");
 }

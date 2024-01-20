@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/components/cells/initial/initial_cells.dart';
 import 'package:excuse_demo/service/user_service.dart';
@@ -165,14 +168,16 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           onPressed: () {
-            // BotToast.showLoading();
+            BotToast.showLoading();
             String phone = _phoneController.text;
             String password = _passwordController.text;
             if (phone.isEmpty || password.isEmpty) {
               return;
             }
-            loginService(phone, password);
-            print(loginService(phone, password));
+            Future.delayed(Duration(milliseconds: 100),(){
+              loginService(phone, password);
+              BotToast.closeAllLoading();
+            });
           },
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/components/cells/initial/initial_cells.dart';
 import 'package:excuse_demo/service/user_service.dart';
 import 'package:flutter/material.dart';
@@ -189,6 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           onPressed: () {
+            BotToast.showLoading();
             String name = _nameController.text;
             String phone = _phoneController.text;
             String password = _passwordController.text;
@@ -199,7 +201,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 repassword.isEmpty) {
               return;
             }
-            registerService(name, phone, password, repassword);
+            Future.delayed(Duration(milliseconds: 100),(){
+              registerService(name, phone, password, repassword);
+              BotToast.closeAllLoading();
+            });
           },
         ),
       ),
