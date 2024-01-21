@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/service/event_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -15,8 +16,8 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   final GlobalKey _formKey = GlobalKey<FormState>();
-  var _value_u = null;
-  var _value_p = null;
+  var _valueU = 0;
+  var _valueP = 0;
   var isOpen = false;
 
   late TextEditingController _locationController;
@@ -89,8 +90,13 @@ class _CreateEventState extends State<CreateEvent> {
             print("=========${user.id}");
             BotToast.closeAllLoading();
           });
-          // createEventService(
-          //     user.id, location, details, urgency, pattern, commission);
+          createEventService(
+              user.id,
+              _locationController.text,
+              _detailsController.text,
+              _valueU,
+              _valueP,
+              double.parse(_commissionController.text));
         },
         child: Padding(
           padding: const EdgeInsets.only(right: 16, top: 10),
@@ -133,7 +139,7 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   buildLocationField(BuildContext context) {
-    return _value_p == 1
+    return _valueP == 1
         ? Padding(
             padding: const EdgeInsets.only(left: 50, right: 50),
             child: Column(
@@ -149,7 +155,7 @@ class _CreateEventState extends State<CreateEvent> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide:
-                      BorderSide(color: Color.fromARGB(255, 187, 222, 251)),
+                          BorderSide(color: Color.fromARGB(255, 187, 222, 251)),
                     ),
                     suffixIcon: Icon(Icons.location_on),
                     // isCollapsed: true,
@@ -157,8 +163,7 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
                 SizedBox(height: 30)
               ],
-            )
-          )
+            ))
         : SizedBox(height: 0);
   }
 
@@ -199,7 +204,7 @@ class _CreateEventState extends State<CreateEvent> {
                       height: 0.5,
                       color: Colors.black,
                     ),
-                    value: _value_u,
+                    value: _valueU,
                     hint: Text("请选择紧急程度"),
                     items: const [
                       DropdownMenuItem(
@@ -242,14 +247,14 @@ class _CreateEventState extends State<CreateEvent> {
                             ],
                           )),
                     ],
-                    onChanged: (value) => setState(() => _value_u = value!)),
+                    onChanged: (value) => setState(() => _valueU = value!)),
                 const SizedBox(width: 10),
                 DropdownButton(
                     underline: Container(
                       height: 0.5,
                       color: Colors.black,
                     ),
-                    value: _value_p,
+                    value: _valueP,
                     hint: Text("请选择需求方式"),
                     items: const [
                       DropdownMenuItem(
@@ -271,7 +276,7 @@ class _CreateEventState extends State<CreateEvent> {
                             ],
                           )),
                     ],
-                    onChanged: (value) => setState(() => _value_p = value!)),
+                    onChanged: (value) => setState(() => _valueP = value!)),
               ],
             ),
           )
@@ -290,20 +295,123 @@ class _CreateEventState extends State<CreateEvent> {
             height: 40,
             child: Row(
               children: [
-                Text("佣金",style: TextStyle(fontSize: 20),),
+                Text(
+                  "佣金",
+                  style: TextStyle(fontSize: 20),
+                ),
                 // SwitchListTile(
                 //     title: Text('佣金'),
                 //     value: isOpen,
                 //     onChanged: (value) => setState(() => isOpen = value)),
-                SizedBox(width:200),
+                // SizedBox(width: 200),
+                getSizedBox(context),
                 Switch(
                     value: isOpen,
                     onChanged: (value) => setState(() => isOpen = value)),
+
+                getCommission(context),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  getSizedBox(BuildContext context) {
+    return isOpen == true
+        ? const SizedBox(width: 15)
+        : const SizedBox(width: 170);
+  }
+
+  getCommission(BuildContext context) {
+    return isOpen == true
+        ? SizedBox(
+            // height: MediaQuery.of(context).size.height * 0.5,
+            // width: MediaQuery.of(context).size.width * 0.5,
+            // padding: EdgeInsets.only(right: 1),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const SizedBox(width: 20),
+                const Text(
+                  "￥",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: TextField(
+                    controller: _commissionController,
+                    onChanged: (v) => _commissionController.text = v,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(6),
+                      FilteringTextInputFormatter(RegExp("[0-9.]"),
+                          allow: true),
+                      MyNumberTextInputFormatter(digit: 2),
+                    ],
+                    textAlign: TextAlign.right,
+                    decoration: const InputDecoration(),
+                    style: const TextStyle(fontSize: 30),
+                  ),
+                ),
+                const Text(
+                  "元",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+          )
+        : const SizedBox(width: 0);
+  }
+}
+
+class MyNumberTextInputFormatter extends TextInputFormatter {
+  static const defaultDouble = 0.001;
+
+  ///允许的小数位数，-1代表不限制位数
+  int digit;
+
+  MyNumberTextInputFormatter({this.digit = -1});
+
+  static double strToFloat(String str, [double defaultValue = defaultDouble]) {
+    try {
+      return double.parse(str);
+    } catch (e) {
+      return defaultValue;
+    }
+  }
+
+  ///获取目前的小数位数
+  static int getValueDigit(String value) {
+    if (value.contains(".")) {
+      return value.split(".")[1].length;
+    } else {
+      return -1;
+    }
+  }
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String value = newValue.text;
+    int selectionIndex = newValue.selection.end;
+    if (value == ".") {
+      value = "0.";
+      selectionIndex++;
+    } else if (value == "-") {
+      value = "-";
+      selectionIndex++;
+    } else if (value != "" &&
+            value != defaultDouble.toString() &&
+            strToFloat(value, defaultDouble) == defaultDouble ||
+        getValueDigit(value) > digit) {
+      value = oldValue.text;
+      selectionIndex = oldValue.selection.end;
+    }
+    return new TextEditingValue(
+      text: value,
+      selection: new TextSelection.collapsed(offset: selectionIndex),
     );
   }
 }
