@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                   duration: const Duration(milliseconds: 100),
                   child: Container(
                     width: mWidth,
-                    height: mHeight * 0.85,
+                    height: mHeight * 0.6,
                     child: const CreateEvent(),
                   ),
                 );
