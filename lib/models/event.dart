@@ -6,7 +6,7 @@ String eventToJson(EventData data) => json.encode(data.toJson());
 
 class EventData {
   int code;
-  List<Event> event;
+  Event event;
   String message;
 
   EventData({
@@ -16,15 +16,15 @@ class EventData {
   });
 
   factory EventData.fromJson(Map<String, dynamic> json) => EventData(
-    code: json["Code"],
-    event: List<Event>.from(json["Data"].map((x) => Event.fromJson(x))),
-    message: json["Message"],
+    code: json["code"],
+    event: Event.fromJson(json["data"]),
+    message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
-    "Code": code,
-    "Data": List<dynamic>.from(event.map((x) => x.toJson())),
-    "Message": message,
+    "code": code,
+    "data": event.toJson(),
+    "message": message,
   };
 }
 
