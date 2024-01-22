@@ -2,6 +2,7 @@
 
 class EventRoute{
   static const String eventRootPath='/event';
+  static const String eventListPath='$eventRootPath/getEventList';
   static const String eventCreatePath='$eventRootPath/createEvent';
   static const String eventDeletePath='$eventRootPath/deleteEvent';
 }
