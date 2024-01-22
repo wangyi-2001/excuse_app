@@ -1,31 +1,15 @@
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/models/user.dart';
-import 'package:excuse_demo/views/event/event_details.dart';
 import 'package:flutter/material.dart';
 
 class EventCell extends StatelessWidget {
   final Event event;
   final User createUser;
 
-  // final DateTime updateTime;
-  // final int creatorId;
-  // final String location;
-  // final String details;
-  // final int urgency;
-  // final int pattern;
-  // final double commission;
-
   const EventCell({
     super.key,
     required this.event,
     required this.createUser,
-    // required this.updateTime,
-    // required this.creatorId,
-    // required this.location,
-    // required this.details,
-    // required this.urgency,
-    // required this.pattern,
-    // required this.commission
   });
 
   getUrgency(int urgency) {
@@ -38,7 +22,7 @@ class EventCell extends StatelessWidget {
       case 1:
         return const Text(
           "●",
-          style: TextStyle(color: Colors.orange, fontSize: 17),
+          style: TextStyle(color: Colors.amber, fontSize: 17),
         );
       case 2:
         return const Text(
@@ -50,17 +34,17 @@ class EventCell extends StatelessWidget {
 
   getPattern(int pattern) {
     if (pattern == 0) {
-      return Text("电话 📱");
+      return const Text("电话 📱");
     } else {
-      return Text("现场 🏃‍");
+      return const Text("现场 🏃‍");
     }
   }
 
   getCommission(String commission) {
     if (commission.isEmpty) {
-      return Text("无佣金");
+      return const Text("无佣金");
     } else {
-      return Text("佣金￥${commission}元");
+      return Text("佣金￥$commission元");
     }
   }
 
@@ -76,14 +60,12 @@ class EventCell extends StatelessWidget {
             children: [
               Container(
                 height: 40,
+                width: 310,
                 padding: const EdgeInsets.only(left: 35, top: 8, bottom: 5),
                 child: Text(
                   createUser.name,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-              ),
-              SizedBox(
-                width: 250,
               ),
               Container(
                   height: 40,
@@ -98,8 +80,8 @@ class EventCell extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                child: Text(
+                padding: const EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                child: const Text(
                   "详\n情",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
@@ -152,20 +134,21 @@ class EventCell extends StatelessWidget {
                 ),
               ),
               Container(
-                  padding: const EdgeInsets.only(right: 15, top: 5, bottom: 5),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[100],
+                padding: const EdgeInsets.only(right: 15, top: 5, bottom: 5),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[100],
+                  ),
+                  child: const SizedBox(
+                    width: 60,
+                    child: Text(
+                      "查看事件",
+                      style: TextStyle(color: Colors.black),
                     ),
-                    child: const SizedBox(
-                      width: 60,
-                      child: Text(
-                        "查看事件",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ))
+                  ),
+                ),
+              ),
             ],
           ),
         ],
