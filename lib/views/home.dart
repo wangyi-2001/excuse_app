@@ -11,19 +11,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> pageTitles = [];
-  List<Widget> pageChildren = [];
+  // pageTitles = [];
+  // pageChildren = [];
   int currentIndex = 0;
+  var currentPage;
+
+  List<String> pageTitles = ["事件列表", "我"];
+  List<Widget> pageChildren = [
+    const EventPage(),
+    const MinePage(),
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
-    pageTitles = ["事件", "我的"];
-    pageChildren = [
-      const EventPage(),
-      const MinePage(),
-    ];
+
     super.initState();
+    currentPage=pageChildren[currentIndex];
   }
 
   @override
@@ -35,13 +39,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text(pageTitles[currentIndex]),
         // 导航栏标题剧中
         centerTitle: true,
         elevation: 1,
+        automaticallyImplyLeading: false,
       ),
-      body: pageChildren[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: pageChildren,
+      ),
       bottomNavigationBar: BottomAppBar(
         // 中间悬浮按钮嵌入BottomAppBar
         shape: const CircularNotchedRectangle(),
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.black,
         // 阴影
         elevation: 10.0,
         shape: const CircleBorder(),
