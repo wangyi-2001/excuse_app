@@ -15,9 +15,8 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
-  final GlobalKey _formKey = GlobalKey<FormState>();
-  var _valueU = 0;
-  var _valueP = 0;
+  var _valueU;
+  var _valueP;
   var isOpen = false;
 
   late TextEditingController _locationController;
@@ -96,7 +95,8 @@ class _CreateEventState extends State<CreateEvent> {
               _detailsController.text,
               _valueU,
               _valueP,
-              double.parse(_commissionController.text));
+              _commissionController.text);
+          Navigator.pop(context);
         },
         child: Padding(
           padding: const EdgeInsets.only(right: 16, top: 10),
@@ -213,7 +213,7 @@ class _CreateEventState extends State<CreateEvent> {
                             children: [
                               Text("一般", style: TextStyle(color: Colors.black)),
                               Text(
-                                " ●",
+                                "       ●",
                                 style: TextStyle(color: Colors.greenAccent),
                               )
                             ],
@@ -227,7 +227,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               Text(
-                                " ●",
+                                "       ●",
                                 style: TextStyle(color: Colors.orange),
                               )
                             ],
@@ -241,7 +241,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               Text(
-                                " ●",
+                                "   ●",
                                 style: TextStyle(color: Colors.red),
                               )
                             ],
@@ -261,7 +261,7 @@ class _CreateEventState extends State<CreateEvent> {
                           value: 0,
                           child: Row(
                             children: [
-                              Text("电话📞",
+                              Text("电话 📱",
                                   style: TextStyle(color: Colors.black)),
                             ],
                           )),
@@ -270,7 +270,7 @@ class _CreateEventState extends State<CreateEvent> {
                           child: Row(
                             children: [
                               Text(
-                                "现场🏃‍",
+                                "现场 🏃‍",
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
