@@ -33,8 +33,6 @@ with AutomaticKeepAliveClientMixin{
   void initState() {
     super.initState();
 
-    getEventsList();
-
     _getEvents().then((List<Event> eventsData) {
       setState(() {
         _events = eventsData;

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/views/event/event_create.dart';
 import 'package:excuse_demo/views/event/event_list.dart';
 import 'package:excuse_demo/views/home.dart';
@@ -64,6 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    getEventsList();
     readFromStorage();
   }
 

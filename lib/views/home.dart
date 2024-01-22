@@ -1,3 +1,4 @@
+import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/views/event/event_create.dart';
 import 'package:excuse_demo/views/event/event_list.dart';
 import 'package:excuse_demo/views/mine/mine.dart';
@@ -11,8 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // pageTitles = [];
-  // pageChildren = [];
   int currentIndex = 0;
   var currentPage;
 
@@ -24,8 +23,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
     currentPage=pageChildren[currentIndex];
   }
