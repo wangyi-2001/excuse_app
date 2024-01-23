@@ -73,6 +73,7 @@ class Event {
   int status;
   int score;
   String evaluate;
+  String reportedTimes;
 
   Event({
     required this.id,
@@ -91,26 +92,27 @@ class Event {
     required this.status,
     required this.score,
     required this.evaluate,
+    required this.reportedTimes,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
-        id: json["ID"],
-        createdAt: DateTime.parse(json["CreatedAt"]),
-        updatedAt: DateTime.parse(json["UpdatedAt"]),
-        deletedAt: json["DeletedAt"],
-        creatorId: json["CreatorID"],
-        creator: User.fromJson(json["Creator"]),
-        location: json["Location"],
-        details: json["Details"],
-        urgency: json["Urgency"],
-        pattern: json["Pattern"],
-        commission: json["Commission"],
-        recipientId: json["RecipientID"],
-        recipient: User.fromJson(json["Recipient"]),
-        status: json["Status"],
-        score: json["Score"],
-        evaluate: json["Evaluate"],
-      );
+      id: json["ID"],
+      createdAt: DateTime.parse(json["CreatedAt"]),
+      updatedAt: DateTime.parse(json["UpdatedAt"]),
+      deletedAt: json["DeletedAt"],
+      creatorId: json["CreatorID"],
+      creator: User.fromJson(json["Creator"]),
+      location: json["Location"],
+      details: json["Details"],
+      urgency: json["Urgency"],
+      pattern: json["Pattern"],
+      commission: json["Commission"],
+      recipientId: json["RecipientID"],
+      recipient: User.fromJson(json["Recipient"]),
+      status: json["Status"],
+      score: json["Score"],
+      evaluate: json["Evaluate"],
+      reportedTimes: jsonEncode("ReportedTimes"));
 
   Map<String, dynamic> toJson() => {
         "ID": id,
@@ -129,6 +131,7 @@ class Event {
         "Status": status,
         "Score": score,
         "Evaluate": evaluate,
+        "ReportedTimes": reportedTimes
       };
 }
 
@@ -149,31 +152,32 @@ class Creator {
   bool isLogout;
   String deviceInfo;
   int remainingTimes;
+  String balance;
   int violationsNum;
   int favorableComment;
   int accountStatus;
 
-  Creator({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.deletedAt,
-    required this.avatar,
-    required this.name,
-    required this.initials,
-    required this.password,
-    required this.phone,
-    required this.email,
-    required this.clientIp,
-    required this.identity,
-    required this.salt,
-    required this.isLogout,
-    required this.deviceInfo,
-    required this.remainingTimes,
-    required this.violationsNum,
-    required this.favorableComment,
-    required this.accountStatus
-  });
+  Creator(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.avatar,
+      required this.name,
+      required this.initials,
+      required this.password,
+      required this.phone,
+      required this.email,
+      required this.clientIp,
+      required this.identity,
+      required this.salt,
+      required this.isLogout,
+      required this.deviceInfo,
+      required this.remainingTimes,
+      required this.balance,
+      required this.violationsNum,
+      required this.favorableComment,
+      required this.accountStatus});
 
   factory Creator.fromJson(Map<String, dynamic> json) => Creator(
       id: json["ID"],
@@ -192,32 +196,33 @@ class Creator {
       isLogout: json["IsLogout"],
       deviceInfo: json["DeviceInfo"],
       remainingTimes: json["RemainingTimes"],
+      balance: json['Balance'],
       violationsNum: json["ViolationsNum"],
       favorableComment: json["FavorableComment"],
-      accountStatus: json["AccountStatus"]
-  );
+      accountStatus: json["AccountStatus"]);
 
   Map<String, dynamic> toJson() => {
-    "ID": id,
-    "CreatedAt": createdAt.toIso8601String(),
-    "UpdatedAt": updatedAt.toIso8601String(),
-    "DeletedAt": deletedAt,
-    "Avatar": avatar,
-    "Name": name,
-    "Initials": initials,
-    "Password": password,
-    "Phone": phone,
-    "Email": email,
-    "ClientIp": clientIp,
-    "Identity": identity,
-    "Salt": salt,
-    "IsLogout": isLogout,
-    "DeviceInfo": deviceInfo,
-    "RemainingTimes":remainingTimes,
-    "ViolationsNum":violationsNum,
-    "FavorableComment":favorableComment,
-    "AccountStatus":accountStatus
-  };
+        "ID": id,
+        "CreatedAt": createdAt.toIso8601String(),
+        "UpdatedAt": updatedAt.toIso8601String(),
+        "DeletedAt": deletedAt,
+        "Avatar": avatar,
+        "Name": name,
+        "Initials": initials,
+        "Password": password,
+        "Phone": phone,
+        "Email": email,
+        "ClientIp": clientIp,
+        "Identity": identity,
+        "Salt": salt,
+        "IsLogout": isLogout,
+        "DeviceInfo": deviceInfo,
+        "RemainingTimes": remainingTimes,
+        "Balance": balance,
+        "ViolationsNum": violationsNum,
+        "FavorableComment": favorableComment,
+        "AccountStatus": accountStatus
+      };
 }
 
 class Recipient {
@@ -237,31 +242,32 @@ class Recipient {
   bool isLogout;
   String deviceInfo;
   int remainingTimes;
+  String balance;
   int violationsNum;
   int favorableComment;
   int accountStatus;
 
-  Recipient({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.deletedAt,
-    required this.avatar,
-    required this.name,
-    required this.initials,
-    required this.password,
-    required this.phone,
-    required this.email,
-    required this.clientIp,
-    required this.identity,
-    required this.salt,
-    required this.isLogout,
-    required this.deviceInfo,
-    required this.remainingTimes,
-    required this.violationsNum,
-    required this.favorableComment,
-    required this.accountStatus
-  });
+  Recipient(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.avatar,
+      required this.name,
+      required this.initials,
+      required this.password,
+      required this.phone,
+      required this.email,
+      required this.clientIp,
+      required this.identity,
+      required this.salt,
+      required this.isLogout,
+      required this.deviceInfo,
+      required this.remainingTimes,
+      required this.balance,
+      required this.violationsNum,
+      required this.favorableComment,
+      required this.accountStatus});
 
   factory Recipient.fromJson(Map<String, dynamic> json) => Recipient(
       id: json["ID"],
@@ -280,30 +286,31 @@ class Recipient {
       isLogout: json["IsLogout"],
       deviceInfo: json["DeviceInfo"],
       remainingTimes: json["RemainingTimes"],
+      balance: json["Balance"],
       violationsNum: json["ViolationsNum"],
       favorableComment: json["FavorableComment"],
-      accountStatus: json["AccountStatus"]
-  );
+      accountStatus: json["AccountStatus"]);
 
   Map<String, dynamic> toJson() => {
-    "ID": id,
-    "CreatedAt": createdAt.toIso8601String(),
-    "UpdatedAt": updatedAt.toIso8601String(),
-    "DeletedAt": deletedAt,
-    "Avatar": avatar,
-    "Name": name,
-    "Initials": initials,
-    "Password": password,
-    "Phone": phone,
-    "Email": email,
-    "ClientIp": clientIp,
-    "Identity": identity,
-    "Salt": salt,
-    "IsLogout": isLogout,
-    "DeviceInfo": deviceInfo,
-    "RemainingTimes":remainingTimes,
-    "ViolationsNum":violationsNum,
-    "FavorableComment":favorableComment,
-    "AccountStatus":accountStatus
-  };
+        "ID": id,
+        "CreatedAt": createdAt.toIso8601String(),
+        "UpdatedAt": updatedAt.toIso8601String(),
+        "DeletedAt": deletedAt,
+        "Avatar": avatar,
+        "Name": name,
+        "Initials": initials,
+        "Password": password,
+        "Phone": phone,
+        "Email": email,
+        "ClientIp": clientIp,
+        "Identity": identity,
+        "Salt": salt,
+        "IsLogout": isLogout,
+        "DeviceInfo": deviceInfo,
+        "RemainingTimes": remainingTimes,
+        "Balance": balance,
+        "ViolationsNum": violationsNum,
+        "FavorableComment": favorableComment,
+        "AccountStatus": accountStatus
+      };
 }
