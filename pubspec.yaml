@@ -33,6 +33,7 @@ dependencies:
   shared_preferences: ^2.2.2
   dio: ^5.4.0
   bot_toast: any
+  date_format: ^2.0.7
 #  cross_connectivity: any
 #  amap_flutter_location: ^3.0.0
 #  permission_handler: ^11.2.0
