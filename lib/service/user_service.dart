@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 
 loginService(String phone, String password) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // sharedPreferences.remove("user");
   Map<String, dynamic> queryParameters = {"phone": phone, "password": password};
 
   Response response = await Dio().post(
@@ -22,8 +23,6 @@ loginService(String phone, String password) async {
   }
 
   BotToast.showText(text: UserData.fromJson(response.data).message);
-
-  // sharedPreferences.remove("user");
 }
 
 registerService(
@@ -60,4 +59,12 @@ logoutService(int userId) async {
       queryParameters: queryParameters);
   BotToast.showText(text: "已退出");
   sharedPreferences.remove("user");
+}
+
+findUserById(int userId)async{
+  SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+  // sharedPreferences.remove("userById");
+  Map<String, dynamic> queryParameters = {"id": userId};
+  Response response=await Dio().post(HttpOptions.BASE_URL+UserRoute.userInfoByIdPath,queryParameters: queryParameters);
+  sharedPreferences.setString("userById", jsonEncode(response.data));
 }

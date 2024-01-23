@@ -7,4 +7,5 @@ class UserRoute{
   static const String userUpdatePath='$userRootPath/updateUser';
   static const String userLoginPath='$userRootPath/findUserByPhoneAndPwd';
   static const String userLogoutPath='$userRootPath/logoutStatus';
+  static const String userInfoByIdPath='$userRootPath/findUserById';
 }
