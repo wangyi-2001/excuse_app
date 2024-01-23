@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/changePwd': (context) => const ChangePwdPage(),
         '/event': (context) => const EventPage(),
-        "/createEvent": (context) => const CreateEvent(),
+        '/createEvent': (context) => const CreateEvent(),
       },
     );
   }
