@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:excuse_demo/components/cells/event/event_cell.dart';
 import 'package:excuse_demo/models/event.dart';
+import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/service/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,16 @@ class EventPage extends StatefulWidget {
 class _EventPageState extends State<EventPage>
 with AutomaticKeepAliveClientMixin{
   List<Event> _events = [];
+  late User _user;
+
+  Future<User> _getUser() async{
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    var userStr=prefs.getString("user");
+    var userJson=jsonDecode(userStr.toString());
+    _user=UserData.fromJson(userJson).user;
+    print("=====${jsonEncode(_user)}=====");
+    return _user;
+  }
 
   Future<List<Event>> _getEvents() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,6 +47,12 @@ with AutomaticKeepAliveClientMixin{
     _getEvents().then((List<Event> eventsData) {
       setState(() {
         _events = eventsData;
+      });
+    });
+
+    _getUser().then((User user) {
+      setState(() {
+        _user = user;
       });
     });
   }
@@ -69,6 +86,7 @@ with AutomaticKeepAliveClientMixin{
                   return EventCell(
                     event: _events[index],
                     createUser: _events[index].creator,
+                    user: _user,
                   );
                 },
               ),
@@ -88,5 +106,4 @@ with AutomaticKeepAliveClientMixin{
       ),
     );
   }
-
 }
