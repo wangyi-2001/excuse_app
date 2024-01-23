@@ -30,3 +30,11 @@ createEventService(int userId, String location, String details, int urgency,
       queryParameters: queryParameters);
   BotToast.showText(text: EventData.fromJson(response.data).message);
 }
+
+getAcceptedEventsList()async{
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // sharedPreferences.remove("acceptedEvents");
+  Response response =
+      await Dio().get(HttpOptions.BASE_URL + EventRoute.eventAcceptedPath);
+  sharedPreferences.setString("acceptedEvents", jsonEncode(response.data));
+}
