@@ -72,6 +72,7 @@ class _CreateEventState extends State<CreateEvent> {
               buildLocationField(context),
               // const SizedBox(height: 30),
               buildCommissionField(context),
+              const SizedBox(height: 30,)
             ],
           ),
         ),
@@ -85,7 +86,7 @@ class _CreateEventState extends State<CreateEvent> {
         onTap: () async {
           BotToast.showLoading();
           User user = await _getUser().then((User user) => user);
-          Future.delayed(Duration(milliseconds: 100), () {
+          Future.delayed(const Duration(milliseconds: 100), () {
             print("=========${user.id}");
             BotToast.closeAllLoading();
           });
@@ -161,10 +162,10 @@ class _CreateEventState extends State<CreateEvent> {
                     // isCollapsed: true,
                   ),
                 ),
-                SizedBox(height: 30)
+                const SizedBox(height: 30)
               ],
             ))
-        : SizedBox(height: 0);
+        : const SizedBox(height: 0);
   }
 
   buildDetailsField(BuildContext context) {
@@ -205,13 +206,13 @@ class _CreateEventState extends State<CreateEvent> {
                       color: Colors.black,
                     ),
                     value: _valueU,
-                    hint: Text("请选择紧急程度"),
+                    hint: const Text("请选择紧急程度"),
                     items: const [
                       DropdownMenuItem(
                           value: 0,
                           child: Row(
                             children: [
-                              Text("一般", style: TextStyle(color: Colors.black)),
+                              Text("不太急", style: TextStyle(color: Colors.black)),
                               Text(
                                 "       ●",
                                 style: TextStyle(color: Colors.greenAccent),
@@ -223,7 +224,7 @@ class _CreateEventState extends State<CreateEvent> {
                           child: Row(
                             children: [
                               Text(
-                                "紧急",
+                                "有点急",
                                 style: TextStyle(color: Colors.black),
                               ),
                               Text(
@@ -255,7 +256,7 @@ class _CreateEventState extends State<CreateEvent> {
                       color: Colors.black,
                     ),
                     value: _valueP,
-                    hint: Text("请选择需求方式"),
+                    hint: const Text("请选择需求方式"),
                     items: const [
                       DropdownMenuItem(
                           value: 0,
@@ -295,7 +296,7 @@ class _CreateEventState extends State<CreateEvent> {
             height: 40,
             child: Row(
               children: [
-                Text(
+                const Text(
                   "佣金",
                   style: TextStyle(fontSize: 20),
                 ),
@@ -409,9 +410,9 @@ class MyNumberTextInputFormatter extends TextInputFormatter {
       value = oldValue.text;
       selectionIndex = oldValue.selection.end;
     }
-    return new TextEditingValue(
+    return TextEditingValue(
       text: value,
-      selection: new TextSelection.collapsed(offset: selectionIndex),
+      selection: TextSelection.collapsed(offset: selectionIndex),
     );
   }
 }
