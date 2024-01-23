@@ -1,15 +1,19 @@
+import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/models/user.dart';
+import 'package:excuse_demo/views/event/event_details.dart';
 import 'package:flutter/material.dart';
 
 class EventCell extends StatelessWidget {
   final Event event;
   final User createUser;
+  final User user;
 
   const EventCell({
     super.key,
     required this.event,
     required this.createUser,
+    required this.user,
   });
 
   getUrgency(int urgency) {
@@ -44,7 +48,7 @@ class EventCell extends StatelessWidget {
     if (commission.isEmpty) {
       return const Text("无佣金");
     } else {
-      return Text("佣金￥$commission元");
+      return Text("佣金￥${double.parse(commission).toStringAsFixed(2)}元");
     }
   }
 
@@ -65,6 +69,7 @@ class EventCell extends StatelessWidget {
                 child: Text(
                   createUser.name,
                   style: const TextStyle(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Container(
@@ -122,10 +127,10 @@ class EventCell extends StatelessWidget {
                 child: getPattern(event.pattern),
               ),
               const SizedBox(
-                width: 30,
+                width: 10,
               ),
               SizedBox(
-                width: 140,
+                width: 150,
                 child: Container(
                   height: 50,
                   padding: const EdgeInsets.only(
@@ -136,7 +141,18 @@ class EventCell extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.only(right: 15, top: 5, bottom: 5),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CustomRouteSlideRight(
+                        EventDetailsPage(
+                          event: event,
+                          creator: createUser,
+                          user: user,
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[100],
                   ),
