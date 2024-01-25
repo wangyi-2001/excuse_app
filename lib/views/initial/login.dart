@@ -1,8 +1,8 @@
-import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/components/cells/initial/initial_cells.dart';
+import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/service/user_service.dart';
 import 'package:excuse_demo/views/initial/change_pwd.dart';
 import 'package:flutter/gestures.dart';
@@ -47,6 +47,8 @@ class _LoginPageState extends State<LoginPage> {
     //手势初始化
     _registProtocolRecognizer = TapGestureRecognizer();
     _privacyProtocolRecognizer = TapGestureRecognizer();
+
+    getEventsList();
   }
 
   @override
@@ -174,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
             if (phone.isEmpty || password.isEmpty) {
               return;
             }
-            Future.delayed(Duration(milliseconds: 100),(){
+            Future.delayed(const Duration(milliseconds: 100),(){
               loginService(phone, password);
               BotToast.closeAllLoading();
             });

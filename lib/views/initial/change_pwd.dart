@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:excuse_demo/components/cells/initial/initial_cells.dart';
 import 'package:excuse_demo/service/user_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChangePwdPage extends StatefulWidget {
@@ -144,7 +143,7 @@ class _ChangePwdPageState extends State<ChangePwdPage> {
               return;
             }
             //传递数据
-            Future.delayed(Duration(milliseconds: 100),(){
+            Future.delayed(const Duration(milliseconds: 100),(){
               changePwdService(phone, password);
               BotToast.closeAllLoading();
             });
