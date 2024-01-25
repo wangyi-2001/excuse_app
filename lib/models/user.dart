@@ -45,6 +45,9 @@ class User {
   bool isLogout;
   String deviceInfo;
   int remainingTimes;
+  int publicationsNum;
+  int ongoingNum;
+  int totalOrders;
   String balance;
   int violationsNum;
   int favorableComment;
@@ -67,6 +70,9 @@ class User {
       required this.isLogout,
       required this.deviceInfo,
       required this.remainingTimes,
+      required this.publicationsNum,
+      required this.ongoingNum,
+      required this.totalOrders,
       required this.balance,
       required this.violationsNum,
       required this.favorableComment,
@@ -89,7 +95,10 @@ class User {
       isLogout: json["IsLogout"],
       deviceInfo: json["DeviceInfo"],
       remainingTimes: json["RemainingTimes"],
-      balance: json['Balance'],
+      publicationsNum: json["PublicationsNum"],
+      ongoingNum: json["OngoingNum"],
+      totalOrders: json["TotalOrders"],
+      balance: json["Balance"],
       violationsNum: json["ViolationsNum"],
       favorableComment: json["FavorableComment"],
       accountStatus: json["AccountStatus"]);
@@ -111,6 +120,9 @@ class User {
         "IsLogout": isLogout,
         "DeviceInfo": deviceInfo,
         "RemainingTimes": remainingTimes,
+        "PublicationsNum": publicationsNum,
+        "OngoingNum": ongoingNum,
+        "TotalOrders": totalOrders,
         "Balance": balance,
         "ViolationsNum": violationsNum,
         "FavorableComment": favorableComment,
