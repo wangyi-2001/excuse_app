@@ -201,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 repassword.isEmpty) {
               return;
             }
-            Future.delayed(Duration(milliseconds: 100),(){
+            Future.delayed(const Duration(milliseconds: 100),(){
               registerService(name, phone, password, repassword);
               BotToast.closeAllLoading();
             });
