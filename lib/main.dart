@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:excuse_demo/service/event_service.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:excuse_demo/views/event/event_create.dart';
 import 'package:excuse_demo/views/event/event_list.dart';
 import 'package:excuse_demo/views/home.dart';
@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'models/user.dart';
+
 void main() {
   if (Platform.isAndroid) {
     var style = const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
@@ -19,6 +21,8 @@ void main() {
 
   runApp(const MyApp());
 }
+
+EventBus eventBus = EventBus();
 
 // 路由
 class NavigatorKey {
@@ -60,19 +64,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  User? user;
+
   SharedPreferences? sharedPreferences;
 
   @override
   void initState() {
     super.initState();
-    getEventsList();
+    // getEventsList();
     readFromStorage();
   }
 
   void readFromStorage() async {
     var prefs = await SharedPreferences.getInstance();
-    var userJson = prefs.getString('user');
-    if (userJson == null || userJson.isEmpty) {
+    var userStr = prefs.getString('user');
+    if (userStr == null || userStr.isEmpty) {
       Future.delayed(const Duration(milliseconds: 3000), () {
         setState(() {
           Navigator.of(context).pushReplacement(
@@ -82,8 +88,10 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Future.delayed(const Duration(milliseconds: 3000), () {
         setState(() {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomePage()));
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (Route route) => false);
         });
       });
     }
@@ -91,6 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return const Scaffold(
       body: Center(
           child: Column(
