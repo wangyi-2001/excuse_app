@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AcceptedEventsPage extends StatefulWidget {
-  const AcceptedEventsPage({super.key});
+  final User user;
+
+  const AcceptedEventsPage({super.key, required this.user});
 
   @override
   State<AcceptedEventsPage> createState() => _EventPageState();
@@ -15,66 +17,46 @@ class AcceptedEventsPage extends StatefulWidget {
 
 class _EventPageState extends State<AcceptedEventsPage> {
   List<Event> _acceptedEvents = [];
-  late User _user;
 
-  Future<User> _getUser() async{
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var userStr=prefs.getString("user");
-    var userJson=jsonDecode(userStr.toString());
-    _user=UserData.fromJson(userJson).user;
-    print("=====${jsonEncode(_user)}=====");
-    return _user;
-  }
-
-  Future<List<Event>> _getEvents() async {
+  Future<List<Event>> _getAcceptedEvents() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var eventsStr = prefs.getString("acceptedEvents");
     var eventsJson = jsonDecode(eventsStr.toString());
     _acceptedEvents = EventsData.fromJson(eventsJson).events;
-    print("==========${jsonEncode(_acceptedEvents)}==========");
+    // print("==========${jsonEncode(_acceptedEvents)}==========");
     return _acceptedEvents;
   }
 
   @override
   void initState() {
     super.initState();
-    getAcceptedEventsList();
 
-    _getEvents().then((List<Event> eventsData) {
+    _getAcceptedEvents().then((List<Event> eventsData) {
       setState(() {
         _acceptedEvents = eventsData;
       });
     });
-
-    _getUser().then((User user) {
-      setState(() {
-        _user = user;
-      });
-    });
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        getEventsList();
-        setState(() {
-          _getEvents().then((List<Event> eventsData) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("我接受的事件"),
+        centerTitle: true,
+        elevation: 1,
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await getAcceptedEventsList(widget.user.id);
+          _getAcceptedEvents().then((List<Event> eventsData) {
             setState(() {
               _acceptedEvents = eventsData;
             });
           });
-        });
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("我接受的事件"),
-          centerTitle: true,
-          elevation: 1,
-        ),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               ListView.builder(
@@ -85,8 +67,7 @@ class _EventPageState extends State<AcceptedEventsPage> {
                 itemBuilder: (context, index) {
                   return EventCell(
                     event: _acceptedEvents[index],
-                    createUser: _acceptedEvents[index].creator,
-                    user: _user,
+                    user: widget.user,
                   );
                 },
               ),
