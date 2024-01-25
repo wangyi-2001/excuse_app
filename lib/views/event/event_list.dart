@@ -1,10 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:excuse_demo/components/cells/event/event_cell.dart';
+import 'package:excuse_demo/main.dart';
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/service/event_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class GetLatestEventsList{
+  List<Event> events;
+  GetLatestEventsList(this.events);
+}
 
 class EventPage extends StatefulWidget {
   const EventPage({super.key});
@@ -14,16 +21,18 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage>
-with AutomaticKeepAliveClientMixin{
+    with AutomaticKeepAliveClientMixin {
+  late StreamSubscription sub;
+
   List<Event> _events = [];
   late User _user;
 
-  Future<User> _getUser() async{
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var userStr=prefs.getString("user");
-    var userJson=jsonDecode(userStr.toString());
-    _user=UserData.fromJson(userJson).user;
-    print("=====${jsonEncode(_user)}=====");
+  Future<User> _getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userStr = prefs.getString("user");
+    var userJson = jsonDecode(userStr.toString());
+    _user = UserData.fromJson(userJson).user;
+    // print("=====${jsonEncode(_user)}=====");
     return _user;
   }
 
@@ -32,7 +41,7 @@ with AutomaticKeepAliveClientMixin{
     var eventsStr = prefs.getString("events");
     var eventsJson = jsonDecode(eventsStr.toString());
     _events = EventsData.fromJson(eventsJson).events;
-    print("==========${jsonEncode(_events)}==========");
+    // print("==========${jsonEncode(_events)}==========");
     return _events;
   }
 
@@ -55,26 +64,36 @@ with AutomaticKeepAliveClientMixin{
         _user = user;
       });
     });
+
+    sub=eventBus.on<GetLatestEventsList>().listen((event) {
+      setState(() {
+        _events=event.events;
+      });
+    });
   }
 
+  @override
+  void dispose(){
+    super.dispose();
+
+    sub.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
-      onRefresh: () async {
-        getEventsList();
-        setState(() {
-          _getEvents().then((List<Event> eventsData) {
-            setState(() {
-              _events = eventsData;
-            });
-          });
-        });
-      },
-      child: Scaffold(
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await getEventsList();
+          // _getEvents().then((List<Event> eventsData) {
+          //   setState(() {
+          //     _events = eventsData;
+          //   });
+          // });
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               ListView.builder(
@@ -85,7 +104,6 @@ with AutomaticKeepAliveClientMixin{
                 itemBuilder: (context, index) {
                   return EventCell(
                     event: _events[index],
-                    createUser: _events[index].creator,
                     user: _user,
                   );
                 },
