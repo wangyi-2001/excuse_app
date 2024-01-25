@@ -19,7 +19,8 @@ loginService(String phone, String password) async {
 
   if (UserData.fromJson(response.data).code == 0) {
     sharedPreferences.setString("user", jsonEncode(response.data));
-    NavigatorKey.navigatorKey.currentState!.pushNamedAndRemoveUntil("/home", (route) => false);
+    NavigatorKey.navigatorKey.currentState!
+        .pushNamedAndRemoveUntil("/home", (route) => false);
   }
 
   BotToast.showText(text: UserData.fromJson(response.data).message);
@@ -53,18 +54,22 @@ changePwdService(String phone, String password) async {
 
 logoutService(int userId) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  Map<String, dynamic> queryParameters = {"id": userId};
-  Response response = await Dio().post(
+  Map<String, dynamic> queryParameters = {"userId": userId};
+  await Dio().post(
       HttpOptions.BASE_URL + UserRoute.userLogoutPath,
       queryParameters: queryParameters);
   BotToast.showText(text: "已退出");
   sharedPreferences.remove("user");
+  sharedPreferences.remove("acceptedEvents");
+  // sharedPreferences.clear();
 }
 
-findUserById(int userId)async{
-  SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+findUserById(int userId) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   // sharedPreferences.remove("userById");
-  Map<String, dynamic> queryParameters = {"id": userId};
-  Response response=await Dio().post(HttpOptions.BASE_URL+UserRoute.userInfoByIdPath,queryParameters: queryParameters);
-  sharedPreferences.setString("userById", jsonEncode(response.data));
+  Map<String, dynamic> queryParameters = {"userId": userId};
+  Response response = await Dio().post(
+      HttpOptions.BASE_URL + UserRoute.userInfoByIdPath,
+      queryParameters: queryParameters);
+  sharedPreferences.setString("user", jsonEncode(response.data));
 }
