@@ -6,33 +6,39 @@ import 'package:flutter/material.dart';
 
 class EventCell extends StatelessWidget {
   final Event event;
-  final User createUser;
   final User user;
 
   const EventCell({
     super.key,
     required this.event,
-    required this.createUser,
     required this.user,
   });
 
   getUrgency(int urgency) {
-    switch (urgency) {
-      case 0:
-        return const Text(
-          "●",
-          style: TextStyle(color: Colors.green, fontSize: 16),
-        );
-      case 1:
-        return const Text(
-          "●",
-          style: TextStyle(color: Colors.amber, fontSize: 17),
-        );
-      case 2:
-        return const Text(
-          "●",
-          style: TextStyle(color: Colors.red, fontSize: 18),
-        );
+    if(event.status==0) {
+      switch (urgency) {
+        case 0:
+          return const Text(
+            "●",
+            style: TextStyle(color: Colors.green, fontSize: 16),
+          );
+        case 1:
+          return const Text(
+            "●",
+            style: TextStyle(color: Colors.amber, fontSize: 17),
+          );
+        case 2:
+          return const Text(
+            "●",
+            style: TextStyle(color: Colors.red, fontSize: 18),
+          );
+      }
+    }else if(event.status==1){
+      return const Text("进行中");
+    }else if(event.status==2){
+      return const Text("已结束");
+    }else{
+      return const Text("等待对方结果");
     }
   }
 
@@ -52,6 +58,19 @@ class EventCell extends StatelessWidget {
     }
   }
 
+  getEventStatus(){
+    if(event.status==0){
+      return const SizedBox();
+    }else{
+      return Row(
+        children: [
+          const Text(" -> "),
+        Text(event.recipient.name),
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -66,10 +85,20 @@ class EventCell extends StatelessWidget {
                 height: 40,
                 width: 310,
                 padding: const EdgeInsets.only(left: 35, top: 8, bottom: 5),
-                child: Text(
-                  createUser.name,
-                  style: const TextStyle(fontSize: 16),
-                  overflow: TextOverflow.ellipsis,
+                child: Row(
+                  children: [
+                    Text(
+                      event.creator.name,
+                      style: const TextStyle(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+
+                    getEventStatus(),
+
+
+
+                  ],
                 ),
               ),
               Container(
@@ -147,7 +176,6 @@ class EventCell extends StatelessWidget {
                       CustomRouteSlideRight(
                         EventDetailsPage(
                           event: event,
-                          creator: createUser,
                           user: user,
                         ),
                       ),
