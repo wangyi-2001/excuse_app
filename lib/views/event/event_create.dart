@@ -90,7 +90,7 @@ class _CreateEventState extends State<CreateEvent> {
             print("=========${user.id}");
             BotToast.closeAllLoading();
           });
-          createEventService(
+          createEvent(
               user.id,
               _locationController.text,
               _detailsController.text,
