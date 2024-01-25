@@ -1,4 +1,3 @@
-import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/views/event/event_create.dart';
 import 'package:excuse_demo/views/event/event_list.dart';
 import 'package:excuse_demo/views/mine/mine.dart';
@@ -13,20 +12,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
-  var currentPage;
+  // var currentPage;
 
-  List<String> pageTitles = ["事件列表", "我"];
-  List<Widget> pageChildren = [
-    const EventPage(),
-    const MinePage(),
-  ];
+  List<String> pageTitles = ["事件大厅", "我"];
+  List<Widget> pageChildren = [];
 
   @override
   void initState() {
     super.initState();
-    getEventsList();
-    // getAcceptedEventsList();
-    currentPage=pageChildren[currentIndex];
+
+    pageChildren = [
+      const EventPage(),
+      const MinePage(),
+    ];
+
   }
 
   @override
@@ -46,7 +45,10 @@ class _HomePageState extends State<HomePage> {
         elevation: 1,
         automaticallyImplyLeading: false,
       ),
-      body: IndexedStack(
+      // body: pageChildren[currentIndex],
+      body:
+      // pageChildren[currentIndex],
+      IndexedStack(
         index: currentIndex,
         children: pageChildren,
       ),
@@ -59,14 +61,14 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-                icon: Icon(Icons.event),
+                icon: const Icon(Icons.event),
                 onPressed: () {
                   setState(() {
                     currentIndex = 0;
                   });
                 }),
             IconButton(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 onPressed: () {
                   setState(() {
                     currentIndex = 1;
@@ -94,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                 return AnimatedPadding(
                   padding: MediaQuery.of(context).viewInsets,
                   duration: const Duration(milliseconds: 100),
-                  child: Container(
+                  child: SizedBox(
                     width: mWidth,
                     height: mHeight * 0.6,
                     child: const CreateEvent(),
@@ -103,7 +105,7 @@ class _HomePageState extends State<HomePage> {
               });
           // Navigator.of(context).pushNamed("/createEvent");
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.centerDocked, //放在中间
