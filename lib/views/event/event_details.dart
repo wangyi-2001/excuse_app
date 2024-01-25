@@ -1,17 +1,18 @@
 import 'package:date_format/date_format.dart';
+import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/models/user.dart';
+import 'package:excuse_demo/service/event_service.dart';
+import 'package:excuse_demo/views/event/event_edit.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final Event event;
-  final User creator;
   final User user;
 
   const EventDetailsPage(
       {super.key,
       required this.event,
-      required this.creator,
       required this.user});
 
   @override
@@ -19,7 +20,7 @@ class EventDetailsPage extends StatefulWidget {
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
-  getPattern(int pattern, int recipientID) {
+  getPatternWidget(int pattern, int recipientID) {
     if (pattern == 0) {
       if (recipientID == widget.user.id) {
         return Container(
@@ -38,7 +39,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
                 const Icon(Icons.phone_android_outlined),
                 const Text("电话："),
-                Text(widget.creator.phone),
+                Text(widget.event.creator.phone),
               ],
             ),
           ),
@@ -182,16 +183,43 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     }
   }
 
-  getAppBarButton(){
-    if(widget.event.creator.id==widget.user.id){
+  getAppBarButton() {
+    if (widget.event.creator.id == widget.user.id) {
       return Container(
-        padding: EdgeInsets.all(10),
-        child: Icon(Icons.delete_outline_rounded),
+        padding: const EdgeInsets.all(10),
+        child: IconButton(
+          icon: const Icon(Icons.delete_outline_rounded),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("删除此事件？"),
+                content: const Text("此操作不可恢复"),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("取消"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text("确定"),
+                    onPressed: () {
+                      deleteEvent(widget.event.id);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       );
-    }else{
+    } else {
       return Container(
-        padding: EdgeInsets.all(10),
-        child: Icon(Icons.sms_failed_rounded),
+        padding: const EdgeInsets.all(10),
+        child: const Icon(Icons.sms_failed_rounded),
       );
     }
   }
@@ -229,10 +257,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${widget.creator.name}：",
+                  "${widget.event.creator.name}：",
                   style: const TextStyle(fontSize: 24),
                 ),
-                Text(widget.creator.isLogout ? "离线" : "在线"),
+                Text(widget.event.creator.isLogout ? "离线" : "在线"),
                 Text("最后更新于${formatDate(widget.event.updatedAt, [
                       yyyy,
                       '年',
@@ -315,13 +343,20 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ],
                 ),
-                getPattern(widget.event.pattern, widget.user.id),
+                getPatternWidget(
+                    widget.event.pattern, widget.event.recipientId),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: buildBottomBar(),
+    );
+  }
+
+  buildBottomBar() {
+    if (widget.event.creator.id != widget.user.id) {
+      return BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -330,18 +365,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               height: 50,
               width: 180,
               padding:
-              const EdgeInsets.only(left: 20, right: 10, top: 3, bottom: 3),
+                  const EdgeInsets.only(left: 20, right: 10, top: 3, bottom: 3),
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue[100],
                 ),
-                child:Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.chat_outlined),
-                    Text("和TA聊聊")
-                  ],
+                  children: [Icon(Icons.chat_outlined), Text("和TA聊聊")],
                 ),
               ),
             ),
@@ -351,11 +383,39 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               padding:
                   const EdgeInsets.only(left: 10, right: 20, top: 3, bottom: 3),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("接下此事件？"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text(
+                            "否",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        TextButton(
+                          child: const Text(
+                            "是",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          onPressed: () {
+                            acceptEvent(widget.event.id, widget.user.id);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue[100],
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.check_circle_outline_rounded),
@@ -366,7 +426,57 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    } else {
+      return BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 50,
+              width: 180,
+              padding:
+                  const EdgeInsets.only(left: 20, right: 10, top: 3, bottom: 3),
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue[100],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Icon(Icons.attach_money_rounded), Text("增加佣金")],
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              width: 180,
+              padding:
+                  const EdgeInsets.only(left: 10, right: 20, top: 3, bottom: 3),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CustomRouteSlideLeft(
+                      EventEditPage(
+                        event: widget.event,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue[100],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Icon(Icons.edit_note_rounded), Text("编辑")],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
