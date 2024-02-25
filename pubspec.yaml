@@ -35,6 +35,9 @@ dependencies:
   bot_toast: any
   date_format: ^2.0.7
   event_bus: ^2.0.0
+  sqflite: ^2.3.2
+  web_socket_channel: any
+  path: any
 #  cross_connectivity: any
 #  amap_flutter_location: ^3.0.0
 #  permission_handler: ^11.2.0

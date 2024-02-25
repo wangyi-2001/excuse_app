@@ -6,7 +6,7 @@ import 'package:excuse_demo/main.dart';
 import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/service/user_service.dart';
-import 'package:excuse_demo/views/event/event_accpted_list.dart';
+import 'package:excuse_demo/views/event/event_accepted_list.dart';
 import 'package:excuse_demo/views/event/event_published_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

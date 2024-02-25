@@ -92,12 +92,7 @@ class EventCell extends StatelessWidget {
                       style: const TextStyle(fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
-
-
                     getEventStatus(),
-
-
-
                   ],
                 ),
               ),
