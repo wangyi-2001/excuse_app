@@ -283,7 +283,9 @@ class _MinePageState extends State<MinePage> {
                     padding: const EdgeInsets.only(
                         left: 30, right: 10, top: 20, bottom: 5),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/updateInfo");
+                      },
                       child: const Text(
                         "更新信息",
                         style: TextStyle(color: Colors.black, fontSize: 20),

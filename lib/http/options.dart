@@ -5,6 +5,6 @@ class HttpOptions{
   ///接收超时，单位ms
   static const int RECEIVE_TIMEOUT=30000;
   ///地址前缀
-  static const String BASE_URL='http://192.168.31.55:8080';
+  static const String BASE_URL='http://192.168.3.169:8080';
 // static String BASE_URL =InternetAddress.lookup('localhost', type: InternetAddressType.IPv4).toString()+':8080';
 }

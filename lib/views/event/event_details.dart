@@ -1,11 +1,20 @@
+import 'dart:async';
+
 import 'package:date_format/date_format.dart';
 import 'package:excuse_demo/common/page_jump_animation.dart';
+import 'package:excuse_demo/main.dart';
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/models/user.dart';
 import 'package:excuse_demo/service/event_service.dart';
 import 'package:excuse_demo/views/event/event_chat.dart';
 import 'package:excuse_demo/views/event/event_edit.dart';
 import 'package:flutter/material.dart';
+
+class UpdateBottomButton {
+  String text;
+
+  UpdateBottomButton(this.text);
+}
 
 class EventDetailsPage extends StatefulWidget {
   final Event event;
@@ -19,9 +28,14 @@ class EventDetailsPage extends StatefulWidget {
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
+  late StreamSubscription sub;
+  late IconData _icon = Icons.check_circle_outline_rounded;
+  late String _text = "接下这单";
+  late dynamic _action = acceptEvent(widget.event.id, widget.user.id);
+
   Widget getPatternWidget(int pattern, int recipientID, int creatorId) {
-    final isRecipientOrCreator = recipientID == widget.user.id ||
-        creatorId == widget.user.id;
+    final isRecipientOrCreator =
+        recipientID == widget.user.id || creatorId == widget.user.id;
 
     return Container(
       width: isRecipientOrCreator ? 200 : 250,
@@ -65,16 +79,16 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             color: urgency == 0
                 ? Colors.green
                 : urgency == 1
-                ? Colors.amber
-                : Colors.red,
+                    ? Colors.amber
+                    : Colors.red,
           ),
         ),
         Text(
           urgency == 0
               ? "不太急"
               : urgency == 1
-              ? "有点急"
-              : "很急！",
+                  ? "有点急"
+                  : "很急！",
         ),
       ],
     );
@@ -85,38 +99,58 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       padding: const EdgeInsets.all(10),
       child: widget.event.creator.id == widget.user.id
           ? IconButton(
-        icon: const Icon(Icons.delete_outline_rounded),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text("删除此事件？"),
-              content: const Text("此操作不可恢复"),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text("取消"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: const Text("确定"),
-                  onPressed: () {
-                    deleteEvent(widget.event.id);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      )
+              icon: const Icon(Icons.delete_outline_rounded),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("删除此事件？"),
+                    content: const Text("此操作不可恢复"),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text("取消"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text("确定"),
+                        onPressed: () {
+                          deleteEvent(widget.event.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
           : Container(
-        padding: const EdgeInsets.all(10),
-        child: const Icon(Icons.sms_failed_rounded),
-      ),
+              padding: const EdgeInsets.all(10),
+              child: const Icon(Icons.sms_failed_rounded),
+            ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    sub = eventBus.on<UpdateBottomButton>().listen((event) {
+      setState(() {
+        _icon = Icons.cancel_outlined;
+        _text = event.text;
+        _action = null;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    sub.cancel();
   }
 
   @override
@@ -134,7 +168,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             height: 110,
             width: MediaQuery.of(context).size.width,
             padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+                const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,16 +179,16 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
                 Text(widget.event.creator.isLogout ? "离线" : "在线"),
                 Text("最后更新于${formatDate(widget.event.updatedAt, [
-                  yyyy,
-                  '年',
-                  mm,
-                  '月',
-                  dd,
-                  '日',
-                  HH,
-                  ':',
-                  mm
-                ])}")
+                      yyyy,
+                      '年',
+                      mm,
+                      '月',
+                      dd,
+                      '日',
+                      HH,
+                      ':',
+                      mm
+                    ])}")
               ],
             ),
           ),
@@ -166,7 +200,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           Container(
             width: MediaQuery.of(context).size.width,
             padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
+                const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +215,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Card(
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(16.0))),
+                                BorderRadius.all(Radius.circular(16.0))),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,14 +233,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Card(
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(16.0))),
+                                BorderRadius.all(Radius.circular(16.0))),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text("佣金："),
                             Text(widget.event.commission.isEmpty ||
-                                double.parse(widget.event.commission) == 0.0
+                                    double.parse(widget.event.commission) == 0.0
                                 ? "无"
                                 : "￥${widget.event.commission}元"),
                           ],
@@ -220,7 +254,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Card(
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(16.0))),
+                                BorderRadius.all(Radius.circular(16.0))),
                         child: getUrgencyWidget(widget.event.urgency),
                       ),
                     ),
@@ -255,7 +289,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         onPressed: () {
           Navigator.push(
             context,
-            CustomRouteSlideRight(EventChatPage(event:widget.event,user:widget.user)),
+            CustomRouteSlideRight(
+                EventChatPage(event: widget.event, user: widget.user)),
           );
         },
         icon: Icons.chat_outlined,
@@ -266,7 +301,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text("接下此事件？"),
+              title: Text("$_text？"),
               actions: <Widget>[
                 TextButton(
                   child: const Text("否", style: TextStyle(fontSize: 18)),
@@ -277,7 +312,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 TextButton(
                   child: const Text("是", style: TextStyle(fontSize: 18)),
                   onPressed: () {
-                    acceptEvent(widget.event.id, widget.user.id);
+                    _action;
+                    // acceptEvent(widget.event.id, widget.user.id);
                     Navigator.pop(context);
                   },
                 ),
@@ -285,8 +321,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             ),
           );
         },
-        icon: Icons.check_circle_outline_rounded,
-        label: "接下这单",
+        icon: _icon,
+        label: _text,
       ),
     ];
   }

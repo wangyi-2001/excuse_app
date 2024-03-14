@@ -154,7 +154,7 @@ class EventCell extends StatelessWidget {
                 width: 10,
               ),
               SizedBox(
-                width: 150,
+                width: 160,
                 child: Container(
                   height: 50,
                   padding: const EdgeInsets.only(

@@ -6,8 +6,10 @@ import 'package:excuse_demo/http/options.dart';
 import 'package:excuse_demo/main.dart';
 import 'package:excuse_demo/models/event.dart';
 import 'package:excuse_demo/routes/event_route.dart';
+import 'package:excuse_demo/views/event/event_details.dart';
 import 'package:excuse_demo/views/event/event_list.dart';
 import 'package:excuse_demo/views/mine/mine.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 getEventsList() async {
@@ -59,6 +61,7 @@ acceptEvent(int eventId, int userId) async {
       queryParameters: queryParameters);
   eventBus.fire(
       GetLatestUserInfo(EventData.fromJson(response.data).event.recipient));
+  eventBus.fire(UpdateBottomButton("退单"));
   getEventsList();
   BotToast.showText(text: EventData.fromJson(response.data).message);
 }
