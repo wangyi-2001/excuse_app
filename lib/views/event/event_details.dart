@@ -202,7 +202,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   "${widget.event.creator.name}：",
                   style: const TextStyle(fontSize: 24),
                 ),
-                Text(widget.event.creator.isLogout ? "离线" : "在线"),
+                Text(widget.event.creator.isLogout ? "在线" : "离线"),
                 Text("最后更新于${formatDate(widget.event.updatedAt, [
                       yyyy,
                       '年',
