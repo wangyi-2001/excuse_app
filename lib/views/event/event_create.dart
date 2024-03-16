@@ -340,7 +340,7 @@ class _CreateEventState extends State<CreateEvent> {
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
-                  width: 100,
+                  width: 115,
                   child: TextField(
                     controller: _commissionController,
                     onChanged: (v) => _commissionController.text = v,
@@ -363,7 +363,7 @@ class _CreateEventState extends State<CreateEvent> {
               ],
             ),
           )
-        : const SizedBox(width: 0);
+        : const SizedBox(width: 20);
   }
 }
 

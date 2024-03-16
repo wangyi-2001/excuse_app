@@ -73,7 +73,7 @@ class Event {
   int status;
   int score;
   String evaluate;
-  String reportedTimes;
+  int reportedTimes;
 
   Event({
     required this.id,
@@ -112,7 +112,7 @@ class Event {
       status: json["Status"],
       score: json["Score"],
       evaluate: json["Evaluate"],
-      reportedTimes: jsonEncode("ReportedTimes"));
+      reportedTimes: json["ReportedTimes"]);
 
   Map<String, dynamic> toJson() => {
         "ID": id,

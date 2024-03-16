@@ -8,4 +8,5 @@ class EventRoute{
   static const String eventAcceptPath='$eventRootPath/acceptEvent';
   static const String eventAcceptedPath='$eventRootPath/getAcceptedList';
   static const String eventPublishedPath='$eventRootPath/getPublishedList';
+  static const String eventReportPath='$eventRootPath/updateEvent';
 }

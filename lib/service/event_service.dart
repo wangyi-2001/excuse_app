@@ -88,3 +88,22 @@ getPublishedEventsList(int userId) async {
       queryParameters: queryParameters);
   sharedPreferences.setString("publishedEvents", jsonEncode(response.data));
 }
+
+reportEvent(int eventId) async{
+  Map<String, dynamic> queryParameters = {
+    "eventId": eventId,
+  };
+  Response response=await Dio().post(
+    HttpOptions.BASE_URL+EventRoute.eventReportPath,
+    queryParameters: queryParameters
+  );
+  if(EventData.fromJson(response.data).event.reportedTimes==5){
+    await Dio().post(
+        HttpOptions.BASE_URL + EventRoute.eventDeletePath,
+        queryParameters: queryParameters);
+    getEventsList();
+    BotToast.showText(text: "举报成功，已删除此事件");
+  }else{
+    BotToast.showText(text: "举报成功");
+  }
+}

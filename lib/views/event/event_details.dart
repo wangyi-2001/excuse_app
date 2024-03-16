@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/main.dart';
@@ -126,10 +127,34 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 );
               },
             )
-          : Container(
-              padding: const EdgeInsets.all(10),
-              child: const Icon(Icons.sms_failed_rounded),
+          : IconButton(
+        icon: const Icon(Icons.sms_failed_rounded),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("举报事件违规"),
+              content: const Text("举报次数达到5次后事件将被删除"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("取消"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                TextButton(
+                  child: const Text("确定"),
+                  onPressed: () {
+                    reportEvent(widget.event.id);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
+          );
+        },
+      ),
     );
   }
 
