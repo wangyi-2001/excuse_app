@@ -128,33 +128,33 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               },
             )
           : IconButton(
-        icon: const Icon(Icons.sms_failed_rounded),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text("举报事件违规"),
-              content: const Text("举报次数达到5次后事件将被删除"),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text("取消"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                TextButton(
-                  child: const Text("确定"),
-                  onPressed: () {
-                    reportEvent(widget.event.id);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+              icon: const Icon(Icons.sms_failed_rounded),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("举报事件违规"),
+                    content: const Text("举报次数达到5次后事件将被删除"),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text("取消"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text("确定"),
+                        onPressed: () {
+                          reportEvent(widget.event.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -212,7 +212,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       '日',
                       HH,
                       ':',
-                      mm
+                      mm,
+                      ':',
+                      ss
                     ])}")
               ],
             ),
