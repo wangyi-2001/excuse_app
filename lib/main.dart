@@ -7,7 +7,7 @@ import 'package:excuse_demo/views/home.dart';
 import 'package:excuse_demo/views/initial/change_pwd.dart';
 import 'package:excuse_demo/views/initial/login.dart';
 import 'package:excuse_demo/views/initial/register.dart';
-import 'package:excuse_demo/views/mine/update/update.dart';
+import 'package:excuse_demo/views/mine/update/info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/changePwd': (context) => const ChangePwdPage(),
         '/event': (context) => const EventPage(),
         '/createEvent': (context) => const CreateEvent(),
-        '/updateInfo':(context)=>const InfoUpdatePage(),
+        '/info':(context)=>const InfoPage(),
       },
     );
   }

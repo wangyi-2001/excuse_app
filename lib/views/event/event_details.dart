@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:date_format/date_format.dart';
 import 'package:excuse_demo/common/page_jump_animation.dart';
 import 'package:excuse_demo/main.dart';

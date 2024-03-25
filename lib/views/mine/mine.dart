@@ -35,7 +35,6 @@ class _MinePageState extends State<MinePage> {
     var userStr = prefs.getString("user");
     var userJson = jsonDecode(userStr.toString());
     _user = UserData.fromJson(userJson).user;
-    // print("+++++${jsonEncode(_user)}+++++");
     return _user;
   }
 
@@ -99,6 +98,7 @@ class _MinePageState extends State<MinePage> {
                     children: [
                       const SizedBox(
                         width: 100,
+                        child: Icon(Icons.ac_unit,size: 80,),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,7 +284,7 @@ class _MinePageState extends State<MinePage> {
                         left: 30, right: 10, top: 20, bottom: 5),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, "/updateInfo");
+                        Navigator.pushNamed(context, "/info");
                       },
                       child: const Text(
                         "更新信息",

@@ -71,7 +71,6 @@ getAcceptedEventsList(int userId) async {
   Map<String, dynamic> queryParameters = {
     "recipientId": userId,
   };
-  // sharedPreferences.remove("acceptedEvents");
   Response response = await Dio().get(
       HttpOptions.BASE_URL + EventRoute.eventAcceptedPath,
       queryParameters: queryParameters);

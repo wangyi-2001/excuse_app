@@ -32,7 +32,6 @@ class _EventPageState extends State<EventPage>
     var userStr = prefs.getString("user");
     var userJson = jsonDecode(userStr.toString());
     _user = UserData.fromJson(userJson).user;
-    // print("=====${jsonEncode(_user)}=====");
     return _user;
   }
 
@@ -41,7 +40,6 @@ class _EventPageState extends State<EventPage>
     var eventsStr = prefs.getString("events");
     var eventsJson = jsonDecode(eventsStr.toString());
     _events = EventsData.fromJson(eventsJson).events;
-    // print("==========${jsonEncode(_events)}==========");
     return _events;
   }
 
@@ -86,11 +84,6 @@ class _EventPageState extends State<EventPage>
       body: RefreshIndicator(
         onRefresh: () async {
           await getEventsList();
-          // _getEvents().then((List<Event> eventsData) {
-          //   setState(() {
-          //     _events = eventsData;
-          //   });
-          // });
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
