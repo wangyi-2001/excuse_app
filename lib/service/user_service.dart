@@ -10,7 +10,6 @@ import 'package:dio/dio.dart';
 
 loginService(String phone, String password) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  // sharedPreferences.remove("user");
   Map<String, dynamic> queryParameters = {"phone": phone, "password": password};
 
   Response response = await Dio().post(
@@ -55,21 +54,47 @@ changePwdService(String phone, String password) async {
 logoutService(int userId) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   Map<String, dynamic> queryParameters = {"userId": userId};
-  await Dio().post(
-      HttpOptions.BASE_URL + UserRoute.userLogoutPath,
+  await Dio().post(HttpOptions.BASE_URL + UserRoute.userLogoutPath,
       queryParameters: queryParameters);
   BotToast.showText(text: "已退出");
   sharedPreferences.remove("user");
   sharedPreferences.remove("acceptedEvents");
-  // sharedPreferences.clear();
 }
 
 findUserById(int userId) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  // sharedPreferences.remove("userById");
   Map<String, dynamic> queryParameters = {"userId": userId};
   Response response = await Dio().post(
       HttpOptions.BASE_URL + UserRoute.userInfoByIdPath,
+      queryParameters: queryParameters);
+  sharedPreferences.setString("user", jsonEncode(response.data));
+}
+
+updateUserInfo(int userId, int flag, String info) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  late Map<String, dynamic> queryParameters;
+  switch (flag) {
+    case 0:
+      queryParameters = {
+        "userId": userId,
+        "name": info,
+      };
+      break;
+    case 1:
+      queryParameters = {
+        "userId": userId,
+        "phone": info,
+      };
+      break;
+    case 2:
+      queryParameters = {
+        "userId": userId,
+        "email": info,
+      };
+      break;
+  }
+  Response response = await Dio().post(
+      HttpOptions.BASE_URL + UserRoute.userUpdatePath,
       queryParameters: queryParameters);
   sharedPreferences.setString("user", jsonEncode(response.data));
 }
